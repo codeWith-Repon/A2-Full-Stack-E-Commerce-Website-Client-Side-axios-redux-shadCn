@@ -12,6 +12,7 @@ const initalState = {
 const AuthRegister = () => {
 
   const [formData, setFormData] = useState(initalState)
+  console.log(formData)
 
   function onSubmit(){}
   return (

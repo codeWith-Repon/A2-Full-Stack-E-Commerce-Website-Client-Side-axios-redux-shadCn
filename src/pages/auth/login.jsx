@@ -25,7 +25,7 @@ const AuthLogin = () => {
             className="font-medium text-primary ml-2 hover:underline"
             to="/auth/register"
           >
-            Login
+            Sign up
           </Link>
         </p>
       </div>
