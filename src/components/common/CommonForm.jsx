@@ -23,7 +23,7 @@ const CommonForm = ({
       case "input":
         element = (
           <Input
-            name={getControllItem.placeholder}
+            placeholder={getControllItem.placeholder}
             id={getControllItem.name}
             type={getControllItem.type}
             value={value}

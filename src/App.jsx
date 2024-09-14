@@ -18,7 +18,7 @@ import UnAuthPage from "./pages/unauth-page";
 
 function App() {
 
-  const isAuthenticated = true;
+  const isAuthenticated = false;
   const user = null;
 
   return (
