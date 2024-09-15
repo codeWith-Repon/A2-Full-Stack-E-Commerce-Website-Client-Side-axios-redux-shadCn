@@ -27,6 +27,7 @@ const AuthRegister = () => {
         toast({
           title : data?.payload?.message,
         })
+        navigate('/auth/login')
       }
     })
   }
