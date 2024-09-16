@@ -15,11 +15,13 @@ import ShopingListing from "./pages/Shopping-view/ShopingListing";
 import ShopingAccount from "./pages/Shopping-view/ShopingAccount";
 import CheckAuth from "./components/common/CheckAuth";
 import UnAuthPage from "./pages/unauth-page";
+import { useSelector } from "react-redux";
 
 function App() {
 
   const isAuthenticated = false;
   const user = null;
+
 
   return (
     <div className="flex flex-col overflow-hidden bg-white">
