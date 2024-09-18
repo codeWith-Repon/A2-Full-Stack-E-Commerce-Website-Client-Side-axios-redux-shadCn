@@ -23,6 +23,7 @@ const CommonForm = ({
       case "input":
         element = (
           <Input
+            name={getControllItem.name}
             placeholder={getControllItem.placeholder}
             id={getControllItem.name}
             type={getControllItem.type}
@@ -81,6 +82,7 @@ const CommonForm = ({
           <Input
             name={getControllItem.placeholder}
             id={getControllItem.name}
+            placeholder={getControllItem.placeholder}
             type={getControllItem.type}
             onChange={(event)=> 
                 setFormData({
