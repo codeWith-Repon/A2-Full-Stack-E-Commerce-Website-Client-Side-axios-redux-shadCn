@@ -15,9 +15,7 @@ const CommonForm = ({
 }) => {
   function renderInputsByComponentType(getControllItem) {
     let element = null;
-    const value = formData[getControllItem.name] || ''
-
-
+    const value = formData[getControllItem.name] || "";
 
     switch (getControllItem.componentType) {
       case "input":
@@ -28,11 +26,11 @@ const CommonForm = ({
             id={getControllItem.name}
             type={getControllItem.type}
             value={value}
-            onChange={(event)=> 
-                setFormData({
-                    ...formData,
-                    [getControllItem.name]: event.target.value,
-                })
+            onChange={(event) =>
+              setFormData({
+                ...formData,
+                [getControllItem.name]: event.target.value,
+              })
             }
           />
         );
@@ -40,10 +38,15 @@ const CommonForm = ({
 
       case "select":
         element = (
-          <Select onValueChange={(value)=> setFormData({
-            ...formData,
-            [getControllItem.name]: value
-          })} value={value}>
+          <Select
+            onValueChange={(value) =>
+              setFormData({
+                ...formData,
+                [getControllItem.name]: value,
+              })
+            }
+            value={value}
+          >
             <SelectTrigger className="w-full">
               <SelectValue placeholder={getControllItem.placeholder} />
             </SelectTrigger>
@@ -67,11 +70,11 @@ const CommonForm = ({
             placeholder={getControllItem.placeholder}
             id={getControllItem.id}
             value={value}
-            onChange={(event)=> 
-                setFormData({
-                    ...formData,
-                    [getControllItem.name]: event.target.value,
-                })
+            onChange={(event) =>
+              setFormData({
+                ...formData,
+                [getControllItem.name]: event.target.value,
+              })
             }
           />
         );
@@ -84,11 +87,11 @@ const CommonForm = ({
             id={getControllItem.name}
             placeholder={getControllItem.placeholder}
             type={getControllItem.type}
-            onChange={(event)=> 
-                setFormData({
-                    ...formData,
-                    [getControllItem.name]: event.target.value,
-                })
+            onChange={(event) =>
+              setFormData({
+                ...formData,
+                [getControllItem.name]: event.target.value,
+              })
             }
           />
         );
@@ -107,7 +110,9 @@ const CommonForm = ({
           </div>
         ))}
       </div>
-      <Button type="submit" className="mt-2 w-full">{buttonText || "Submit"}</Button>
+      <Button type="submit" className="mt-2 w-full">
+        {buttonText || "Submit"}
+      </Button>
     </form>
   );
 };

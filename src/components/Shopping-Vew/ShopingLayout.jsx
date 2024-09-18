@@ -5,8 +5,8 @@ import ShopingHeader from "./ShopingHeader";
 const ShopingLayout = () => {
   return (
     <div className="flex flex-col bg-white overflow-hidden">
-        {/* common header */}
-        <ShopingHeader/>
+      {/* common header */}
+      <ShopingHeader />
       <main className="flex flex-col w-full">
         <Outlet />
       </main>
