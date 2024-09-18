@@ -23,12 +23,16 @@ function App() {
 
   // const isAuthenticated = false;
   // const user = null;
-  const {user,isAuthenticated} = useSelector(state => state.auth)
+  const {user,isAuthenticated,isLoading} = useSelector(state => state.auth)
   const dispatch = useDispatch()
 
   useEffect(()=>{
     dispatch(checkAuth())
   },[dispatch])
+
+  if(isLoading) return <div>Loading...</div>
+
+  console.log(isLoading, user)
 
   return (
     <div className="flex flex-col overflow-hidden bg-white">
