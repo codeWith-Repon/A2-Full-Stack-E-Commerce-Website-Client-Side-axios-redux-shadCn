@@ -1,3 +1,4 @@
+import CommonForm from "@/components/common/CommonForm";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -5,11 +6,25 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { addProductFormElements } from "@/config";
 import React, { Fragment, useState } from "react";
+
+const initialFormData = {
+  image: null,
+  title: "",
+  description: "",
+  brand: "",
+  price: "",
+  salePrice: "",
+  totalStock: "",
+};
 
 const AdminProducts = () => {
   const [openCreateProductsDialog, setOpenCreateProductsDialog] =
     useState(false);
+  const [formData, setFormData] = useState(initialFormData);
+  function onSubmit() {}
+
   return (
     <Fragment>
       <div className="mb-5 w-full flex justify-end">
@@ -28,6 +43,16 @@ const AdminProducts = () => {
           <SheetHeader>
             <SheetTitle>Add New Product</SheetTitle>
           </SheetHeader>
+
+          <div className="py-6">
+            <CommonForm
+              onSubmit={onSubmit}
+              formData={formData}
+              setFormData={setFormData}
+              formControls={addProductFormElements}
+              buttonText="Add"
+            />
+          </div>
         </SheetContent>
       </Sheet>
     </Fragment>
