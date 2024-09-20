@@ -43,7 +43,7 @@ const ProductImageUpload = ({
     const response = await axios.post("http://localhost:5000/api/admin/products/upload-image", data)
     console.log(response,"response")
 
-    if(response) setUploadedImageUrl(response.data)
+    if(response.data?.success) setUploadedImageUrl(response.data.result.url)
   }
 
 
