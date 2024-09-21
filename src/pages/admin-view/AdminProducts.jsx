@@ -8,6 +8,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { addProductFormElements } from "@/config";
+import { toast } from "@/hooks/use-toast";
 import { addNewProduct, fetchAllProducts } from "@/store/admin/products-slice/AdminProductSlice";
 import React, { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -41,9 +42,18 @@ const AdminProducts = () => {
       })
     ).then((data) => {
       console.log(data);
+      if(data?.payload?.success){
+        dispatch(fetchAllProducts())
+        setOpenCreateProductsDialog(false)
+        setImageFile(null)
+        setFormData(initialFormData)
+        toast({
+          title: "Product Add Successfully"
+        })
+      }
     });
   }
-  
+
   useEffect(()=>{
     dispatch(fetchAllProducts())
   },[dispatch])
