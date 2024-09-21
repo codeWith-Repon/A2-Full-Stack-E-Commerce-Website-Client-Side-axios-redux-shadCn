@@ -4,13 +4,15 @@ import { Input } from "../ui/input";
 import { FileIcon, UploadCloudIcon, XIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import axios from "axios";
+import { Skeleton } from "../ui/skeleton";
 
 const ProductImageUpload = ({
   imageFile,
   setImageFile,
   uploadedImageUrl,
   setUploadedImageUrl,
-  setImageLoadingState
+  setImageLoadingState,
+  imageLoadingState
 }) => {
   const inputRef = useRef(null);
   // console.log(inputRef.current.value)
@@ -80,6 +82,8 @@ const ProductImageUpload = ({
             <span>Drag & drop or click upload image</span>
           </Label>
         ) : (
+          imageLoadingState ?
+          <Skeleton className="h-10 bg-gray-100"/> :
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <FileIcon className="w-8 text-primary mr-2 h-8" />
