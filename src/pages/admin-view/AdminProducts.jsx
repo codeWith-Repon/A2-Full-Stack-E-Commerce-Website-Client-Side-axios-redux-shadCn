@@ -8,7 +8,9 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { addProductFormElements } from "@/config";
-import React, { Fragment, useState } from "react";
+import { addNewProduct, fetchAllProducts } from "@/store/admin/products-slice/AdminProductSlice";
+import React, { Fragment, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const initialFormData = {
   image: null,
@@ -27,11 +29,26 @@ const AdminProducts = () => {
   const [imageFile, setImageFile] = useState(null)
   const [uploadedImageUrl, setUploadedImageUrl] = useState("")
   const [imageLoadingState, setImageLoadingState] = useState(false);
-
+  const {productList} = useSelector(state=>state.AdminProducts)
+  const dispatch = useDispatch()
   
-  function onSubmit() {}
+  function onSubmit(event) {
+    event.preventDefault();
+    dispatch(
+      addNewProduct({
+        ...formData,
+        image: uploadedImageUrl,
+      })
+    ).then((data) => {
+      console.log(data);
+    });
+  }
+  
+  useEffect(()=>{
+    dispatch(fetchAllProducts())
+  },[dispatch])
 
-  console.log(formData)  
+  console.log("productList", productList, uploadedImageUrl)  
 
   return (
     <Fragment>

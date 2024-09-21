@@ -74,10 +74,11 @@ const AdminProductSlice = createSlice({
         console.log(action.payload);
 
         state.isLoading = false;
-        state.productList = action.payload;
+        state.productList = action.payload.data;
       })
       .addCase(fetchAllProducts.rejected, (state, action) => {
-        (state.isLoading = false), (state.productList = []);
+        state.isLoading = false;
+        state.productList = [];
       });
   },
 });
