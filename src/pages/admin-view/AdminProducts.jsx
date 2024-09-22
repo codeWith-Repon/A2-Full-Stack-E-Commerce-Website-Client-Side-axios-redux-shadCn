@@ -92,7 +92,12 @@ const AdminProducts = () => {
       >
         <SheetContent side="right" className="overflow-auto">
           <SheetHeader>
-            <SheetTitle>Add New Product</SheetTitle>
+            <SheetTitle>
+            {
+              currentEditedId !== null ? 
+              "Edit Product" : "Add New Product"
+            }
+            </SheetTitle>
           </SheetHeader>
           <ProductImageUpload
             imageFile={imageFile}
@@ -109,7 +114,7 @@ const AdminProducts = () => {
               formData={formData}
               setFormData={setFormData}
               formControls={addProductFormElements}
-              buttonText="Add"
+              buttonText={currentEditedId !== null ? "Edit" : "add"}
             />
           </div>
         </SheetContent>
