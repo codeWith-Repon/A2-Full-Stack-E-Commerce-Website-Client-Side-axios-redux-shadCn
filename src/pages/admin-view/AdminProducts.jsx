@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/sheet";
 import { addProductFormElements } from "@/config";
 import { toast } from "@/hooks/use-toast";
-import { addNewProduct, fetchAllProducts } from "@/store/admin/products-slice/AdminProductSlice";
+import { addNewProduct, editProduct, fetchAllProducts } from "@/store/admin/products-slice/AdminProductSlice";
 import React, { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -38,6 +38,15 @@ const AdminProducts = () => {
   
   function onSubmit(event) {
     event.preventDefault();
+
+    currentEditedId !== null ? 
+    dispatch(editProduct({
+      id : currentEditedId, formData
+    }))
+    .then((data)=>{
+      console.log("edit",data)
+    })
+    :
     dispatch(
       addNewProduct({
         ...formData,
