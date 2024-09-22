@@ -79,7 +79,7 @@ const ProductImageUpload = ({
           <Label
             htmlFor="image-upload"
             className={`${
-              currentEditedId ? "cursor-not-allowed" : ""
+              currentEditedId ? "!cursor-not-allowed" : ""
             } flex flex-col items-center justify-center h-32 cursor-pointer`}
           >
             <UploadCloudIcon className="w-10 h-10 text-muted-foreground mb-2" />
