@@ -148,7 +148,7 @@ const AdminProducts = () => {
               setFormData={setFormData}
               formControls={addProductFormElements}
               buttonText={currentEditedId !== null ? "Edit" : "add"}
-              isButtonDisabled={!isFormValid() || imageFile === null}
+              isButtonDisabled={!isFormValid()}
             />
           </div>
         </SheetContent>
