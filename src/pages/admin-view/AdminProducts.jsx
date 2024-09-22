@@ -99,6 +99,7 @@ const AdminProducts = () => {
             setUploadedImageUrl={setUploadedImageUrl}
             setImageLoadingState={setImageLoadingState}
             imageLoadingState={imageLoadingState}
+            currentEditedId={currentEditedId !== null}
           />
           <div className="py-6">
             <CommonForm
