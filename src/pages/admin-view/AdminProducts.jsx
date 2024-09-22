@@ -61,7 +61,7 @@ const AdminProducts = () => {
     dispatch(fetchAllProducts())
   },[dispatch])
 
-  console.log("productList", productList, uploadedImageUrl)  
+  console.log("productList", formData)  
 
   return (
     <Fragment>
@@ -86,6 +86,8 @@ const AdminProducts = () => {
         open={openCreateProductsDialog}
         onOpenChange={() => {
           setOpenCreateProductsDialog(false);
+          setCurrentEditedId(null);
+          setFormData(initialFormData)
         }}
       >
         <SheetContent side="right" className="overflow-auto">
