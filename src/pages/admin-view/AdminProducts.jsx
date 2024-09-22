@@ -73,6 +73,13 @@ const AdminProducts = () => {
     });
   }
 
+  function isFormValid () {
+    return Object.keys(formData)
+    // .filter(key => key !== "salePrice") //if ignore 
+    .map(key => formData[key] !== "")
+    .every(item=>item)
+  }
+
   useEffect(()=>{
     dispatch(fetchAllProducts())
   },[dispatch])
@@ -131,6 +138,7 @@ const AdminProducts = () => {
               setFormData={setFormData}
               formControls={addProductFormElements}
               buttonText={currentEditedId !== null ? "Edit" : "add"}
+              isButtonDisabled={!isFormValid() || imageFile === null}
             />
           </div>
         </SheetContent>
