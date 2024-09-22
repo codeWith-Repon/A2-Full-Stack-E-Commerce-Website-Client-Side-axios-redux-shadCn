@@ -31,6 +31,8 @@ const AdminProducts = () => {
   const [imageFile, setImageFile] = useState(null)
   const [uploadedImageUrl, setUploadedImageUrl] = useState("")
   const [imageLoadingState, setImageLoadingState] = useState(false);
+  const [currentEditedId,setCurrentEditedId] = useState(null)
+
   const {productList} = useSelector(state=>state.AdminProducts)
   const dispatch = useDispatch()
   
@@ -69,9 +71,14 @@ const AdminProducts = () => {
         </Button>
       </div>
       <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
-      {productList && productList.length > 0
+        {productList && productList.length > 0
           ? productList.map((productItem) => (
-              <AdminProductTile product={productItem} />
+              <AdminProductTile
+                setFormData={setFormData}
+                setOpenCreateProductsDialog={setOpenCreateProductsDialog}
+                setCurrentEditedId={setCurrentEditedId}
+                product={productItem}
+              />
             ))
           : null}
       </div>
