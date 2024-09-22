@@ -45,6 +45,13 @@ const AdminProducts = () => {
     }))
     .then((data)=>{
       console.log("edit",data)
+
+      if(data?.payload?.success){
+        dispatch(fetchAllProducts());
+        setFormData(initialFormData);
+        setOpenCreateProductsDialog(false);
+        setCurrentEditedId(null)
+      }
     })
     :
     dispatch(
