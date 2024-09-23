@@ -1,10 +1,17 @@
-import { HousePlug, Menu } from "lucide-react";
+import { HousePlug, Menu, ShoppingCart } from "lucide-react";
 import React from "react";
 import { Link } from "react-router-dom";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { Button } from "../ui/button";
 import { useSelector } from "react-redux";
 import { ShoppingViewHeaderMenuIems } from "@/config";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@radix-ui/react-dropdown-menu";
+import { Avatar, AvatarFallback } from "@radix-ui/react-avatar";
 
 function MenuItems() {
   return (
@@ -22,8 +29,32 @@ function MenuItems() {
   );
 }
 
+function HeaderRightContent() {
+  return (
+    <div className="flex lg:items-center lg:flex-row flex-col gap-4">
+      <Button variant="outline" size="icon">
+        <ShoppingCart className="w-6 h-6" />
+        <span className="sr-only">User cart</span>
+      </Button>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Avatar className="bg-black rounded-full">
+            <AvatarFallback className="bg-black text-white font-extrabold rounded-full p-2">
+              SM
+            </AvatarFallback>
+          </Avatar>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent side="right" className="w-56">
+          <DropdownMenuLabel>Logged in as </DropdownMenuLabel>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
+  );
+}
+
 const ShopingHeader = () => {
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated,user } = useSelector((state) => state.auth);
+  console.log("user", user)
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
@@ -46,7 +77,9 @@ const ShopingHeader = () => {
         <div className="hidden lg:block">
           <MenuItems />
         </div>
-        {isAuthenticated ? <div></div> : null}
+        {isAuthenticated ? <div>
+          <HeaderRightContent/>
+        </div> : null}
       </div>
     </header>
   );
