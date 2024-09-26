@@ -47,6 +47,11 @@ const ShopingListing = () => {
     sessionStorage.setItem("filters", JSON.stringify(copyFilters))  
   }
 
+  useEffect(()=>{
+    setSort("price-lowtohigh")
+    setFilters(JSON.parse(sessionStorage.getItem('filters'))|| {})
+  },[])
+
 
   useEffect(() => {
     dispatch(fetchAllFilterdProducts());
