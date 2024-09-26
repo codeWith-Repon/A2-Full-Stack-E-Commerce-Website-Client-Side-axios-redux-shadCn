@@ -15,7 +15,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 
-function createSearchParamsHelper(filterParams){
+function createSearchParamsHelper(filterParams,sortParams){
   const queryParams = [];
 
   for(const [key,value] of Object.entries(filterParams)){
@@ -24,6 +24,9 @@ function createSearchParamsHelper(filterParams){
 
       queryParams.push(`${key}=${encodeURIComponent(paramValue)}`)
     }
+  }
+  if(sortParams){
+    queryParams.push(`sortBy=${encodeURIComponent(sortParams)}`)
   }
   return queryParams.join('&')
 }
@@ -69,10 +72,11 @@ const ShopingListing = () => {
 
   useEffect(()=>{
     if(filters && Object.keys(filters).length > 0){
-      const createQuireyString = createSearchParamsHelper(filters)
+      const createQuireyString = createSearchParamsHelper(filters,sort)
+      console.log("update query string", createQuireyString)
       setSearchParams(new URLSearchParams(createQuireyString))
     }
-  },[filters])
+  },[filters,sort])
 
   useEffect(() => {
     if(filters !== null && sort !== null)
