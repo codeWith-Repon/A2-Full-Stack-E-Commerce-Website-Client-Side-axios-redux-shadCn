@@ -75,8 +75,9 @@ const ShopingListing = () => {
   },[filters])
 
   useEffect(() => {
-    dispatch(fetchAllFilterdProducts());
-  }, [dispatch]);
+    if(filters !== null && sort !== null)
+    dispatch(fetchAllFilterdProducts({filterParams: filters, sortParams: sort}));
+  }, [dispatch, sort, filters]);
 
   console.log("searchParams:", searchParams.toString());
 
