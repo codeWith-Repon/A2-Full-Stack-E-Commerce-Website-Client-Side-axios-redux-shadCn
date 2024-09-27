@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { sortOptions } from "@/config";
-import { fetchAllFilterdProducts } from "@/store/shop/products-slice/ShoppingProductSlice";
+import { fetchAllFilterdProducts, fetchProdcutDetails } from "@/store/shop/products-slice/ShoppingProductSlice";
 import { ArrowUpDown } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -33,7 +33,7 @@ function createSearchParamsHelper(filterParams,sortParams){
 
 const ShopingListing = () => {
   const dispatch = useDispatch();
-  const { productList } = useSelector((state) => state.shopProducts);
+  const { productList, productDetails } = useSelector((state) => state.shopProducts);
   const [filters, setFilters] = useState({})
   const [sort, setSort] = useState(null)
   const [searchParams, setSearchParams] = useSearchParams()
@@ -64,6 +64,12 @@ const ShopingListing = () => {
     setFilters(copyFilters)
     sessionStorage.setItem("filters", JSON.stringify(copyFilters))  
   }
+
+  function handleGetProductDetails(getCurrentProductId){
+    console.log("current product id is : ", getCurrentProductId)
+    dispatch(fetchProdcutDetails(getCurrentProductId))
+  }
+  console.log("recive product", productDetails)
 
   useEffect(()=>{
     setSort("price-lowtohigh")
@@ -122,7 +128,7 @@ const ShopingListing = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
           {productList && productList.length > 0
             ? productList.map((productItem) => (
-                <ShopingProductTile product={productItem} />
+                <ShopingProductTile handleGetProductDetails={handleGetProductDetails} product={productItem} />
               ))
             : null}
         </div>

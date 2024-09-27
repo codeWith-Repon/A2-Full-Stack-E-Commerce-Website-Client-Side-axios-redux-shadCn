@@ -14,10 +14,12 @@ const ProductFilter = ({ filters, handleFilter }) => {
         {Object.keys(filterOptions).map((keyItem) => (
           <Fragment>
             <div>
-              <h3 key={keyItem} className="text-base font-extrabold">{keyItem}</h3>
+              <h3 key={keyItem} className="text-base font-extrabold">
+                {keyItem}
+              </h3>
               <div className="grid gap-2 mt-2">
                 {filterOptions[keyItem].map((option) => (
-                  <Label op className="flex items-center gap-2 font-medium">
+                  <Label className="flex items-center gap-2 font-medium">
                     <Checkbox
                       checked={
                         filters &&
