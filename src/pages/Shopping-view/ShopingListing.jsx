@@ -1,3 +1,4 @@
+import ProductDetailsDialog from "@/components/Shopping-Vew/ProductDetailsDialog";
 import ProductFilter from "@/components/Shopping-Vew/ProductFilter";
 import ShopingProductTile from "@/components/Shopping-Vew/ShopingProductTile";
 import { Button } from "@/components/ui/button";
@@ -37,6 +38,7 @@ const ShopingListing = () => {
   const [filters, setFilters] = useState({})
   const [sort, setSort] = useState(null)
   const [searchParams, setSearchParams] = useSearchParams()
+  const [openDetailsDialog, setOpenDetailsDialog] = useState(false)
 
   function handleSort(value){
     // console.log(value)
@@ -89,7 +91,11 @@ const ShopingListing = () => {
     dispatch(fetchAllFilterdProducts({filterParams: filters, sortParams: sort}));
   }, [dispatch, sort, filters]);
 
-  console.log("searchParams:", searchParams.toString());
+  useEffect(()=>{
+    if(productDetails !== null) setOpenDetailsDialog(true)
+    
+  },[productDetails])
+
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">
@@ -133,6 +139,11 @@ const ShopingListing = () => {
             : null}
         </div>
       </div>
+      <ProductDetailsDialog
+       openDetailsDialog={openDetailsDialog} 
+       setOpenDetailsDialog={setOpenDetailsDialog} 
+       productDetails={productDetails}
+       />
     </div>
   );
 };
