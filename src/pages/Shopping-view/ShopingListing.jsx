@@ -71,7 +71,10 @@ const ShopingListing = () => {
     console.log("current product id is : ", getCurrentProductId)
     dispatch(fetchProdcutDetails(getCurrentProductId))
   }
-  console.log("recive product", productDetails)
+  
+  function handleAddToCart(getCurrentId) {
+    console.log(getCurrentId)
+  }
 
   useEffect(()=>{
     setSort("price-lowtohigh")
@@ -134,7 +137,11 @@ const ShopingListing = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
           {productList && productList.length > 0
             ? productList.map((productItem) => (
-                <ShopingProductTile handleGetProductDetails={handleGetProductDetails} product={productItem} />
+                <ShopingProductTile
+                 handleGetProductDetails={handleGetProductDetails}
+                 product={productItem} 
+                 handleAddToCart={handleAddToCart}
+                 />
               ))
             : null}
         </div>
