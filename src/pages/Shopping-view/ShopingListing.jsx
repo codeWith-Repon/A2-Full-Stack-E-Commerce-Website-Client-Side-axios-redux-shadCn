@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { sortOptions } from "@/config";
+import { addToCart, fetchCartItems } from "@/store/shop/Cart-Slice/ShopCartSlice";
 import { fetchAllFilterdProducts, fetchProdcutDetails } from "@/store/shop/products-slice/ShoppingProductSlice";
 import { ArrowUpDown } from "lucide-react";
 import React, { useEffect, useState } from "react";
@@ -35,6 +36,9 @@ function createSearchParamsHelper(filterParams,sortParams){
 const ShopingListing = () => {
   const dispatch = useDispatch();
   const { productList, productDetails } = useSelector((state) => state.shopProducts);
+  const {user} = useSelector(state => state.auth)
+  // console.log("userid is", user)
+  const {cartItems} = useSelector(state => state.shopCart)
   const [filters, setFilters] = useState({})
   const [sort, setSort] = useState(null)
   const [searchParams, setSearchParams] = useSearchParams()
@@ -74,6 +78,11 @@ const ShopingListing = () => {
   
   function handleAddToCart(getCurrentId) {
     console.log(getCurrentId)
+    dispatch(addToCart({userId: user?.id, productId: getCurrentId, quantity: 1}))
+    .then(data=> {
+      console.log('data is: ', data)
+      dispatch(fetchCartItems(user?.id))
+    })
   }
 
   useEffect(()=>{
@@ -99,6 +108,7 @@ const ShopingListing = () => {
     
   },[productDetails])
 
+  console.log("cartItems is ", cartItems)
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">
