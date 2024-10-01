@@ -38,7 +38,6 @@ const ShopingListing = () => {
   const { productList, productDetails } = useSelector((state) => state.shopProducts);
   const {user} = useSelector(state => state.auth)
   // console.log("userid is", user)
-  const {cartItems} = useSelector(state => state.shopCart)
   const [filters, setFilters] = useState({})
   const [sort, setSort] = useState(null)
   const [searchParams, setSearchParams] = useSearchParams()
@@ -108,7 +107,6 @@ const ShopingListing = () => {
     
   },[productDetails])
 
-  console.log("cartItems is ", cartItems)
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">
