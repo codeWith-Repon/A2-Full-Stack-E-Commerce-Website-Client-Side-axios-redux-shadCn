@@ -1,8 +1,27 @@
 import { Minus, Plus, Trash } from "lucide-react";
 import React from "react";
 import { Button } from "../ui/button";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteCartItem } from "@/store/shop/Cart-Slice/ShopCartSlice";
+import { useToast } from "@/hooks/use-toast";
 
 const UserCartItemsContent = ({ cartItem }) => {
+  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const { toast } = useToast();
+
+  function handleCartItemDelete(getCartItem) {
+    dispatch(
+      deleteCartItem({ userId: user?.id, productId: getCartItem?.productId })
+    ).then((data) => {
+      if (data?.payload?.success) {
+        toast({
+          title: "Cart item is deleted successfully",
+        });
+      }
+    });
+  }
+
   return (
     <div className="flex items-center space-x-4">
       <img
@@ -40,7 +59,11 @@ const UserCartItemsContent = ({ cartItem }) => {
             cartItem?.quantity
           ).toFixed(2)}
         </p>
-        <Trash className="cursor-pointer mt-1" size={20} />
+        <Trash
+          onClick={() => handleCartItemDelete(cartItem)}
+          className="cursor-pointer mt-1"
+          size={20}
+        />
       </div>
     </div>
   );
