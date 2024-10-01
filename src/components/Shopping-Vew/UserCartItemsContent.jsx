@@ -2,13 +2,33 @@ import { Minus, Plus, Trash } from "lucide-react";
 import React from "react";
 import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteCartItem } from "@/store/shop/Cart-Slice/ShopCartSlice";
+import {
+  deleteCartItem,
+  updateCartQuantity,
+} from "@/store/shop/Cart-Slice/ShopCartSlice";
 import { useToast } from "@/hooks/use-toast";
 
 const UserCartItemsContent = ({ cartItem }) => {
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const { toast } = useToast();
+
+  function handleUpdateQuantity(getCartItem, typeOfAction) {
+    dispatch(
+      updateCartQuantity({
+        userId: user?.id,
+        productId: getCartItem?.productId,
+        quantity: typeOfAction === "plus" ? 
+        getCartItem?.quantity + 1 : getCartItem?.quantity - 1,
+      })
+    ).then(data=>{
+      if(data?.payload?.success){
+        toast({
+          title: "Cart item is updated successfully",
+        });
+      }
+    })
+  }
 
   function handleCartItemDelete(getCartItem) {
     dispatch(
@@ -36,6 +56,8 @@ const UserCartItemsContent = ({ cartItem }) => {
             variant="outline"
             className="h-8 w-8 rounded-full"
             size="icon"
+            disabled={cartItem?.quantity === 1}
+            onClick={() => handleUpdateQuantity(cartItem, "minus")}
           >
             <Minus className="w-4 h-4" />
             <span className="sr-only">Decrease</span>
@@ -45,6 +67,7 @@ const UserCartItemsContent = ({ cartItem }) => {
             variant="outline"
             className="h-8 w-8 rounded-full"
             size="icon"
+            onClick={() => handleUpdateQuantity(cartItem, "plus")}
           >
             <Plus className="w-4 h-4" />
             <span className="sr-only">Increase</span>
