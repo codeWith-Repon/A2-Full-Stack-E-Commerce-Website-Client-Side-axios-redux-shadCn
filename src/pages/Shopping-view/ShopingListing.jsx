@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { sortOptions } from "@/config";
+import { useToast } from "@/hooks/use-toast";
 import { addToCart, fetchCartItems } from "@/store/shop/Cart-Slice/ShopCartSlice";
 import { fetchAllFilterdProducts, fetchProdcutDetails } from "@/store/shop/products-slice/ShoppingProductSlice";
 import { ArrowUpDown } from "lucide-react";
@@ -42,6 +43,7 @@ const ShopingListing = () => {
   const [sort, setSort] = useState(null)
   const [searchParams, setSearchParams] = useSearchParams()
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false)
+  const {toast} = useToast()
 
   function handleSort(value){
     // console.log(value)
@@ -80,7 +82,12 @@ const ShopingListing = () => {
     dispatch(addToCart({userId: user?.id, productId: getCurrentId, quantity: 1}))
     .then(data=> {
       console.log('data is: ', data)
-      dispatch(fetchCartItems(user?.id))
+      if(data?.payload?.success){
+        dispatch(fetchCartItems(user?.id))
+        toast({
+          title: "Product is added to cart"
+        })
+      }
     })
   }
 
