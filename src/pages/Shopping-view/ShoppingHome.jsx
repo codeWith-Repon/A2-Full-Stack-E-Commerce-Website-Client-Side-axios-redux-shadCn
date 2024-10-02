@@ -20,9 +20,15 @@ import {
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllFilterdProducts } from "@/store/shop/products-slice/ShoppingProductSlice";
+import {
+  fetchAllFilterdProducts,
+  fetchProdcutDetails,
+} from "@/store/shop/products-slice/ShoppingProductSlice";
 import ShopingProductTile from "@/components/Shopping-Vew/ShopingProductTile";
 import { useNavigate } from "react-router-dom";
+import { addToCart, fetchCartItems } from "@/store/shop/Cart-Slice/ShopCartSlice";
+import { useToast } from "@/hooks/use-toast";
+
 
 const categoriesWithIcon = [
   { id: "men", label: "Men", icon: ShirtIcon },
@@ -44,9 +50,11 @@ const brandWithIocn = [
 const ShoppingHome = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const { productList } = useSelector((state) => state.shopProducts);
-  console.log("home product", productList);
+  // console.log("home product", productList);
+  const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const {toast} = useToast()
 
   const slides = [bannerOne, bannerTwo, bannerThree];
 
@@ -58,6 +66,26 @@ const ShoppingHome = () => {
 
     sessionStorage.setItem("filters", JSON.stringify(currentFilter));
     navigate("/shop/listing");
+  }
+
+  function handleGetProductDetails(getCurrentProductId) {
+    console.log("home product details", getCurrentProductId);
+    // dispatch(fetchProdcutDetails(getCurrentProductId));
+  }
+
+  function handleAddToCart(getCurrentId) {
+    console.log(getCurrentId);
+    dispatch(
+      addToCart({ userId: user?.id, productId: getCurrentId, quantity: 1 })
+    ).then((data) => {
+      console.log("data is: ", data);
+      if (data?.payload?.success) {
+        dispatch(fetchCartItems(user?.id));
+        toast({
+          title: "Product is added to cart",
+        });
+      }
+    });
   }
 
   useEffect(() => {
@@ -139,9 +167,7 @@ const ShoppingHome = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {brandWithIocn.map((brandItem) => (
               <Card
-                onClick={() =>
-                  handleNavigateToListingPage(brandItem, "brand")
-                }
+                onClick={() => handleNavigateToListingPage(brandItem, "brand")}
                 className="cursor-pointer hover:shadow-lg transition-shadow"
               >
                 <CardContent className="flex flex-col items-center justify-center p-6">
@@ -162,7 +188,11 @@ const ShoppingHome = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {productList && productList.length > 0
               ? productList.map((productItem) => (
-                  <ShopingProductTile product={productItem} />
+                  <ShopingProductTile
+                    handleGetProductDetails={handleGetProductDetails}
+                    product={productItem}
+                    handleAddToCart={handleAddToCart}
+                  />
                 ))
               : null}
           </div>
