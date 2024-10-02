@@ -22,6 +22,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllFilterdProducts } from "@/store/shop/products-slice/ShoppingProductSlice";
 import ShopingProductTile from "@/components/Shopping-Vew/ShopingProductTile";
+import { useNavigate } from "react-router-dom";
 
 const categoriesWithIcon = [
   { id: "men", label: "Men", icon: ShirtIcon },
@@ -45,8 +46,19 @@ const ShoppingHome = () => {
   const { productList } = useSelector((state) => state.shopProducts);
   console.log("home product", productList);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const slides = [bannerOne, bannerTwo, bannerThree];
+
+  function handleNavigateToListingPage(getCurrentItem, section) {
+    sessionStorage.removeItem("filters");
+    const currentFilter = {
+      [section]: [getCurrentItem.id],
+    };
+
+    sessionStorage.setItem("filters", JSON.stringify(currentFilter));
+    navigate("/shop/listing");
+  }
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -106,7 +118,12 @@ const ShoppingHome = () => {
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {categoriesWithIcon.map((categoryItem) => (
-              <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+              <Card
+                onClick={() =>
+                  handleNavigateToListingPage(categoryItem, "category")
+                }
+                className="cursor-pointer hover:shadow-lg transition-shadow"
+              >
                 <CardContent className="flex flex-col items-center justify-center p-6">
                   <categoryItem.icon className="w-12 h-12 mb-4 text-primary" />
                   <spa className="font-bold">{categoryItem.label}</spa>
@@ -118,12 +135,15 @@ const ShoppingHome = () => {
       </section>
       <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-8">
-            Shop by Brand
-          </h2>
+          <h2 className="text-3xl font-bold text-center mb-8">Shop by Brand</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {brandWithIocn.map((brandItem) => (
-              <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+              <Card
+                onClick={() =>
+                  handleNavigateToListingPage(brandItem, "brand")
+                }
+                className="cursor-pointer hover:shadow-lg transition-shadow"
+              >
                 <CardContent className="flex flex-col items-center justify-center p-6">
                   <brandItem.icon className="w-12 h-12 mb-4 text-primary" />
                   <spa className="font-bold">{brandItem.label}</spa>
