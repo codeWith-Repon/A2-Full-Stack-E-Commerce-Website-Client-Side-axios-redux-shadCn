@@ -28,6 +28,7 @@ import ShopingProductTile from "@/components/Shopping-Vew/ShopingProductTile";
 import { useNavigate } from "react-router-dom";
 import { addToCart, fetchCartItems } from "@/store/shop/Cart-Slice/ShopCartSlice";
 import { useToast } from "@/hooks/use-toast";
+import ProductDetailsDialog from "@/components/Shopping-Vew/ProductDetailsDialog";
 
 
 const categoriesWithIcon = [
@@ -49,7 +50,9 @@ const brandWithIocn = [
 
 const ShoppingHome = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const { productList } = useSelector((state) => state.shopProducts);
+  const { productList, productDetails } = useSelector((state) => state.shopProducts);
+  const [openDetailsDialog, setOpenDetailsDialog] = useState(false)
+
   // console.log("home product", productList);
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -69,8 +72,8 @@ const ShoppingHome = () => {
   }
 
   function handleGetProductDetails(getCurrentProductId) {
-    console.log("home product details", getCurrentProductId);
-    // dispatch(fetchProdcutDetails(getCurrentProductId));
+    // console.log("home product details", getCurrentProductId);
+    dispatch(fetchProdcutDetails(getCurrentProductId));
   }
 
   function handleAddToCart(getCurrentId) {
@@ -103,6 +106,12 @@ const ShoppingHome = () => {
       })
     );
   }, [dispatch]);
+
+  useEffect(()=>{
+    if(productDetails !== null) setOpenDetailsDialog(true)
+    
+  },[productDetails])
+
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -198,6 +207,11 @@ const ShoppingHome = () => {
           </div>
         </div>
       </section>
+      <ProductDetailsDialog
+       openDetailsDialog={openDetailsDialog} 
+       setOpenDetailsDialog={setOpenDetailsDialog} 
+       productDetails={productDetails}
+       />
     </div>
   );
 };
