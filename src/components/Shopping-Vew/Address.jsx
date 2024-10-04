@@ -5,9 +5,11 @@ import { addressFormControls } from "@/config";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addNewAddress,
+  deleteAddress,
   fetchAllAddress,
 } from "@/store/shop/address-slice/AddressSlice";
 import AddressCard from "./AddressCard";
+import { toast } from "@/hooks/use-toast";
 
 const initialAddressFormData = {
   address: "",
@@ -39,7 +41,19 @@ const Address = () => {
     });
   }
 
-  console.log("addressList", addressList);
+  function handleDeleteAddress(getCurrentAddress) {
+    console.log(getCurrentAddress);
+    dispatch(
+      deleteAddress({ userId: user?.id, addressId: getCurrentAddress._id })
+    ).then((data) => {
+      if (data?.payload?.success) {
+        dispatch(fetchAllAddress(user?.id));
+        toast({
+          title: "Address delete successfully"
+        })
+      }
+    });
+  }
 
   function isFormValid() {
     return Object.keys(formData)
@@ -56,7 +70,10 @@ const Address = () => {
       <div className="mb-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
         {addressList && addressList.length > 0
           ? addressList.map((singleAddressItem) => (
-              <AddressCard addressInfo={singleAddressItem} />
+              <AddressCard
+                handleDeleteAddress={handleDeleteAddress}
+                addressInfo={singleAddressItem}
+              />
             ))
           : null}
       </div>
