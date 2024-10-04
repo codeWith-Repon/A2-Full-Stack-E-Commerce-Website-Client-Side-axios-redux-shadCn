@@ -3,7 +3,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import CommonForm from "../common/CommonForm";
 import { addressFormControls } from "@/config";
 import { useDispatch, useSelector } from "react-redux";
-import { addNewAddress, fetchAllAddress } from "@/store/shop/address-slice/AddressSlice";
+import {
+  addNewAddress,
+  fetchAllAddress,
+} from "@/store/shop/address-slice/AddressSlice";
+import AddressCard from "./AddressCard";
 
 const initialAddressFormData = {
   address: "",
@@ -29,13 +33,13 @@ const Address = () => {
       })
     ).then((data) => {
       if (data?.payload?.success) {
-        dispatch(fetchAllAddress(user?.id))
-        setFormData(initialAddressFormData)
+        dispatch(fetchAllAddress(user?.id));
+        setFormData(initialAddressFormData);
       }
     });
   }
 
-  console.log("addressList", addressList)
+  console.log("addressList", addressList);
 
   function isFormValid() {
     return Object.keys(formData)
@@ -43,13 +47,19 @@ const Address = () => {
       .every((item) => item);
   }
 
-  useEffect(()=> {
-    dispatch(fetchAllAddress(user?.id))
-  },[dispatch])
+  useEffect(() => {
+    dispatch(fetchAllAddress(user?.id));
+  }, [dispatch]);
 
   return (
     <Card>
-      <div className="pl-6 pt-2">Address List</div>
+      <div className="mb-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+        {addressList && addressList.length > 0
+          ? addressList.map((singleAddressItem) => (
+              <AddressCard addressInfo={singleAddressItem} />
+            ))
+          : null}
+      </div>
       <CardHeader>
         <CardTitle>Add New Address</CardTitle>
       </CardHeader>
