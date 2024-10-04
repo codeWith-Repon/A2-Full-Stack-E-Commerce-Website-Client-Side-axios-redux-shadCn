@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import CommonForm from "../common/CommonForm";
 import { addressFormControls } from "@/config";
+import { useDispatch, useSelector } from "react-redux";
+import { addNewAddress, fetchAllAddress } from "@/store/shop/address-slice/AddressSlice";
 
 const initialAddressFormData = {
   address: "",
@@ -13,16 +15,37 @@ const initialAddressFormData = {
 
 const Address = () => {
   const [formData, setFormData] = useState(initialAddressFormData);
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+  const { addressList } = useSelector((state) => state.shopAddress);
 
   function handleManageAddress(e) {
     e.preventDefault();
+
+    dispatch(
+      addNewAddress({
+        ...formData,
+        userId: user?.id,
+      })
+    ).then((data) => {
+      if (data?.payload?.success) {
+        dispatch(fetchAllAddress(user?.id))
+        setFormData(initialAddressFormData)
+      }
+    });
   }
+
+  console.log("addressList", addressList)
 
   function isFormValid() {
     return Object.keys(formData)
       .map((key) => formData[key].trim() !== "")
       .every((item) => item);
   }
+
+  useEffect(()=> {
+    dispatch(fetchAllAddress(user?.id))
+  },[dispatch])
 
   return (
     <Card>
