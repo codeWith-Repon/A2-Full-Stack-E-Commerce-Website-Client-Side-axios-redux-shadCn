@@ -3,11 +3,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Table, TableBody, TableCell, TableHead, TableRow } from "../ui/table";
 import { Button } from "../ui/button";
 
-const ShopingOrders = () => {
+const AdminOrdersView = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Order History</CardTitle>
+        <CardTitle>All Orders</CardTitle>
       </CardHeader>
       <CardContent>
         <Table>
@@ -37,4 +37,4 @@ const ShopingOrders = () => {
   );
 };
 
-export default ShopingOrders;
+export default AdminOrdersView;
