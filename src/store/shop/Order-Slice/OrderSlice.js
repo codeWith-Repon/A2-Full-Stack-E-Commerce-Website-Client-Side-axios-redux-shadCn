@@ -31,12 +31,12 @@ const shoppingOrderSlice = createSlice({
       .addCase(createNewOrder.pending, (state) => {
         state.isLoading = true;
       })
-      .builder.addCase(createNewOrder.fulfilled, (state, action) => {
+      .addCase(createNewOrder.fulfilled, (state, action) => {
         state.isLoading = false;
         state.approvalURL = action.payload.approvalURL;
         state.orderId = action.payload.orderId;
       })
-      .builder.addCase(createNewOrder.rejected, (state) => {
+      .addCase(createNewOrder.rejected, (state) => {
         state.isLoading = false;
         state.approvalURL = null;
         state.orderId = null;
