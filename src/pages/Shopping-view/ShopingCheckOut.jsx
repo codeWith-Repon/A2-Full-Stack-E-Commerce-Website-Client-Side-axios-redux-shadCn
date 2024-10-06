@@ -6,20 +6,48 @@ import { Button } from "@/components/ui/button";
 
 const ShopingCheckOut = () => {
   const { cartItems } = useSelector((state) => state.shopCart);
-  console.log("reponX", cartItems);
+  const { user } = useSelector((state) => state.auth);
+  console.log("cart item is", cartItems);
 
   const totalCartAmount =
-    cartItems && cartItems.items && cartItems.items.length > 0
-      ? cartItems.items.reduce(
-          (sum, currentItem) =>
-            sum +
-            (currentItem?.salePrice > 0
-              ? currentItem?.salePrice
-              : currentItem?.price) *
-              currentItem?.quantity,
-          0
-        )
-      : 0;
+  cartItems && cartItems.items && cartItems.items.length > 0
+    ? cartItems.items.reduce(
+        (sum, currentItem) =>
+          sum +
+          (currentItem?.salePrice > 0
+            ? currentItem?.salePrice
+            : currentItem?.price) *
+            currentItem?.quantity,
+        0
+      )
+    : 0;
+
+  function handleInitiatePaypalPayment() {
+    const orderData = {
+      userId: user?.id,
+      cartItems: cartItems.items.map((singleCartItem) => ({
+        productId: singleCartItem?.productId,
+        title: singleCartItem?.title,
+        image: singleCartItem?.image,
+        price:
+          singleCartItem?.salePrice > 0
+            ? singleCartItem?.salePrice
+            : singleCartItem?.price,
+        quantity: singleCartItem?.quantity,
+      })),
+      addressInfo,
+      orderStatus: 'pending',
+      paymentMethod: "paypal",
+      paymentStatus: "pending",
+      totalAmount: totalCartAmount,
+      orderDate: new Date(),
+      orderUpdateDate: new Date(),
+      paymentId: "",
+      payerId:"",
+    };
+  }
+
+ 
 
   return (
     <div className="flex flex-col">
@@ -45,7 +73,9 @@ const ShopingCheckOut = () => {
             </div>
           </div>
           <div className="mt-4 w-full">
-            <Button className="w-full">Checkout with Paypal</Button>
+            <Button onClick={handleInitiatePaypalPayment} className="w-full">
+              Checkout with Paypal
+            </Button>
           </div>
         </div>
       </div>
