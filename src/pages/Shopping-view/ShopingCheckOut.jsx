@@ -1,15 +1,19 @@
 import Address from "@/components/Shopping-Vew/Address";
 import img from "../../assets/account.jpg";
 import UserCartItemsContent from "@/components/Shopping-Vew/UserCartItemsContent";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { createNewOrder } from "@/store/shop/Order-Slice/OrderSlice";
 
 const ShopingCheckOut = () => {
   const { cartItems } = useSelector((state) => state.shopCart);
   const { user } = useSelector((state) => state.auth);
+  const {approvalURL} = useSelector((state)=> state.shopOrder)
   const [currentSelectedAddress, setCurrentSelctedAddress] = useState(null);
-  console.log("currentAddress", currentSelectedAddress);
+  const [isPaymentStart, setIsPaymentStart]= useState(false)
+  const dispatch = useDispatch()
+  console.log("approvalURL", approvalURL);
 
   const totalCartAmount =
     cartItems && cartItems.items && cartItems.items.length > 0
@@ -54,7 +58,19 @@ const ShopingCheckOut = () => {
       paymentId: "",
       payerId: "",
     };
-    console.log(orderData)
+
+    dispatch(createNewOrder(orderData)).then((data)=>{
+      console.log("page checkout data is ", data)
+      if(data?.payload?.data?.success){
+        setIsPaymentStart(true)
+      }else{
+        setIsPaymentStart(false)
+      }
+    })
+  }
+
+  if(approvalURL){
+    window.location.href = approvalURL
   }
 
   return (

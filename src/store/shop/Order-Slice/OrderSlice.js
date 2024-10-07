@@ -33,7 +33,7 @@ const shoppingOrderSlice = createSlice({
       })
       .addCase(createNewOrder.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.approvalURL = action.payload.approvalURL;
+        state.approvalURL = action.payload.data.approvalURL;
         state.orderId = action.payload.orderId;
       })
       .addCase(createNewOrder.rejected, (state) => {
