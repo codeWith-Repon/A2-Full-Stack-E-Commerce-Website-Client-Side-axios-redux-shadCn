@@ -3,24 +3,26 @@ import img from "../../assets/account.jpg";
 import UserCartItemsContent from "@/components/Shopping-Vew/UserCartItemsContent";
 import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
 const ShopingCheckOut = () => {
   const { cartItems } = useSelector((state) => state.shopCart);
   const { user } = useSelector((state) => state.auth);
-  console.log("cart item is", cartItems);
+  const [currentSelectedAddress, setCurrentSelctedAddress] = useState(null);
+  console.log("currentAddress", currentSelectedAddress);
 
   const totalCartAmount =
-  cartItems && cartItems.items && cartItems.items.length > 0
-    ? cartItems.items.reduce(
-        (sum, currentItem) =>
-          sum +
-          (currentItem?.salePrice > 0
-            ? currentItem?.salePrice
-            : currentItem?.price) *
-            currentItem?.quantity,
-        0
-      )
-    : 0;
+    cartItems && cartItems.items && cartItems.items.length > 0
+      ? cartItems.items.reduce(
+          (sum, currentItem) =>
+            sum +
+            (currentItem?.salePrice > 0
+              ? currentItem?.salePrice
+              : currentItem?.price) *
+              currentItem?.quantity,
+          0
+        )
+      : 0;
 
   function handleInitiatePaypalPayment() {
     const orderData = {
@@ -35,19 +37,25 @@ const ShopingCheckOut = () => {
             : singleCartItem?.price,
         quantity: singleCartItem?.quantity,
       })),
-      addressInfo,
-      orderStatus: 'pending',
+      addressInfo: {
+        addressId: currentSelectedAddress?._id,
+        address: currentSelectedAddress?.address,
+        city: currentSelectedAddress?.city,
+        pincode: currentSelectedAddress?.pincode,
+        phone: currentSelectedAddress?.phone,
+        notes: currentSelectedAddress?.notes,
+      },
+      orderStatus: "pending",
       paymentMethod: "paypal",
       paymentStatus: "pending",
       totalAmount: totalCartAmount,
       orderDate: new Date(),
       orderUpdateDate: new Date(),
       paymentId: "",
-      payerId:"",
+      payerId: "",
     };
+    console.log(orderData)
   }
-
- 
 
   return (
     <div className="flex flex-col">
@@ -59,7 +67,7 @@ const ShopingCheckOut = () => {
         />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-5 p-5">
-        <Address />
+        <Address setCurrentSelctedAddress={setCurrentSelctedAddress} />
         <div className="flex flex-col gap-4">
           {cartItems && cartItems.items && cartItems.items.length > 0
             ? cartItems.items.map((item) => (
