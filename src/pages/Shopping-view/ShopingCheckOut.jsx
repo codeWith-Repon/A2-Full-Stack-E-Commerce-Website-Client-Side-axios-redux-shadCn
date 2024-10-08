@@ -62,17 +62,17 @@ const ShopingCheckOut = () => {
 
     dispatch(createNewOrder(orderData)).then((data)=>{
       console.log("page checkout data is ", data)
-      if(data?.payload?.data?.success){
-        setIsPaymentStart(true)
-      }else{
-        setIsPaymentStart(false)
-      }
+      // if(data?.payload?.data?.success){
+      //   setIsPaymentStart(true)
+      // }else{
+      //   setIsPaymentStart(false)
+      // }
     })
   }
 
-  if(approvalURL){
-    window.location.href = approvalURL
-  }
+  // if(approvalURL){
+  //   window.location.href = approvalURL
+  // }
 
   return (
     <div className="flex flex-col">
