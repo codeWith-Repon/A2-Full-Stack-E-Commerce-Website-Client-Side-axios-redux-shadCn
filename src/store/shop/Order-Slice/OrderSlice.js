@@ -40,6 +40,7 @@ export const capturePayment = createAsyncThunk(
 export const getAllOrdersByUserId = createAsyncThunk(
   "order/getAllOrdersByUserId",
   async (userId) => {
+    console.log("user id form slice", userId)
     const response = await axios.get(
       `http://localhost:5000/api/shop/order/list/${userId}`
     );
@@ -88,7 +89,7 @@ const shoppingOrderSlice = createSlice({
       })
       .addCase(getAllOrdersByUserId.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.orderList = action.payload.data;
+        state.orderList = action.payload.data.data;
       })
       .addCase(getAllOrdersByUserId.rejected, (state) => {
         state.isLoading = false;
