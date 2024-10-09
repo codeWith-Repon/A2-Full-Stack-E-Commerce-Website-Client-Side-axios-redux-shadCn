@@ -12,20 +12,32 @@ import { Button } from "../ui/button";
 import { Dialog } from "../ui/dialog";
 import ShoppingOrderDetailsView from "./ShoppingOrderDetailsView";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllOrdersByUserId } from "@/store/shop/Order-Slice/OrderSlice";
+import {
+  getAllOrdersByUserId,
+  getOrderDetails,
+  resetOrderDetails,
+} from "@/store/shop/Order-Slice/OrderSlice";
 import { Badge } from "../ui/badge";
 
 const ShopingOrders = () => {
   const [openDetailsDialog, setOpendetailsDialog] = useState(false);
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  const { orderList } = useSelector((state) => state.shopOrder);
+  const { orderList, orderDetails } = useSelector((state) => state.shopOrder);
+
+  function handleFetchOrderDetails(getId) {
+    dispatch(getOrderDetails(getId));
+  }
 
   useEffect(() => {
     dispatch(getAllOrdersByUserId(user?.id));
   }, [dispatch]);
 
-  console.log("shopOrder List ", orderList);
+  useEffect(() => {
+    if (orderDetails !== null) setOpendetailsDialog(true);
+  }, [orderDetails]);
+
+  console.log("shopOrder List ", orderDetails);
 
   return (
     <Card>
@@ -66,9 +78,16 @@ const ShopingOrders = () => {
                     <TableCell>
                       <Dialog
                         open={openDetailsDialog}
-                        onOpenChange={setOpendetailsDialog}
+                        onOpenChange={() => {
+                          setOpendetailsDialog(false);
+                          dispatch(resetOrderDetails());
+                        }}
                       >
-                        <Button onClick={() => setOpendetailsDialog(true)}>
+                        <Button
+                          onClick={() =>
+                            handleFetchOrderDetails(orderItem?._id)
+                          }
+                        >
                           View Details
                         </Button>
                         <ShoppingOrderDetailsView />
