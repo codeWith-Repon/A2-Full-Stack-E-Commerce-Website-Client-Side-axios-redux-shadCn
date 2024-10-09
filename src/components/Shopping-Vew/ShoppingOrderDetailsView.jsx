@@ -29,6 +29,14 @@ const ShoppingOrderDetailsView = ({ orderDetails }) => {
               <Label>${orderDetails?.data?.totalAmount}</Label>
             </div>
             <div className="flex mt-2 items-center justify-between">
+              <p className="font-medium">Payment method</p>
+              <Label>{orderDetails?.data?.paymentMethod}</Label>
+            </div>
+            <div className="flex mt-2 items-center justify-between">
+              <p className="font-medium">Payment Status</p>
+              <Label>{orderDetails?.data?.paymentStatus}</Label>
+            </div>
+            <div className="flex mt-2 items-center justify-between">
               <p className="font-medium">Order Status</p>
               <Label>
                 <Badge
@@ -64,13 +72,12 @@ const ShoppingOrderDetailsView = ({ orderDetails }) => {
             <div className="grid gap-2">
               <div className="font-medium">Shiping Info</div>
               <div className="grid gap-0.5 text-muted-foreground">
-                <span>{user.userName}</span>
-                <span>{}</span>
-                <span>City</span>
-                <span>Pincode</span>
-                <span>Phone</span>
-                <span>Phone</span>
-                <span>Notes</span>
+                <span>Name: {user.userName}</span>
+                <span>Address: {orderDetails?.data?.addressInfo?.address}</span>
+                <span>City: {orderDetails?.data?.addressInfo?.city}</span>
+                <span>Pincode: {orderDetails?.data?.addressInfo?.pincode}</span>
+                <span>Phone: {orderDetails?.data?.addressInfo?.phone}</span>
+                <span>Notes: {orderDetails?.data?.addressInfo?.notes}</span>
               </div>
             </div>
           </div>
