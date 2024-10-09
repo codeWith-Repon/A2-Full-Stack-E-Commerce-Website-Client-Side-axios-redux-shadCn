@@ -90,7 +90,7 @@ const ShopingOrders = () => {
                         >
                           View Details
                         </Button>
-                        <ShoppingOrderDetailsView />
+                        <ShoppingOrderDetailsView orderDetails={orderDetails} />
                       </Dialog>
                     </TableCell>
                   </TableRow>

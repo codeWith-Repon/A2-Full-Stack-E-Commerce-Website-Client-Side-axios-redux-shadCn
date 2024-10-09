@@ -2,8 +2,15 @@ import React from "react";
 import { DialogContent } from "../ui/dialog";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
+import { Badge } from "../ui/badge";
+import { useSelector } from "react-redux";
 
-const ShoppingOrderDetailsView = () => {
+const ShoppingOrderDetailsView = ({ orderDetails }) => {
+  console.log("orderDetails", orderDetails);
+
+  const {user} = useSelector(state=> state.auth)
+  
+
   return (
     <div>
       <DialogContent className="sm:max-w-[600px]">
@@ -11,19 +18,29 @@ const ShoppingOrderDetailsView = () => {
           <div className="grid gap-2">
             <div className="flex mt-6 items-center justify-between">
               <p className="font-medium">Order ID</p>
-              <Label>14321</Label>
+              <Label>{orderDetails?.data?._id}</Label>
             </div>
             <div className="flex mt-2 items-center justify-between">
               <p className="font-medium">Order Date</p>
-              <Label>10-10-2024</Label>
+              <Label>{orderDetails?.data?.orderDate?.split("T")[0]}</Label>
             </div>
             <div className="flex mt-2 items-center justify-between">
               <p className="font-medium">Order Price</p>
-              <Label>$500</Label>
+              <Label>${orderDetails?.data?.totalAmount}</Label>
             </div>
             <div className="flex mt-2 items-center justify-between">
               <p className="font-medium">Order Status</p>
-              <Label>In Process</Label>
+              <Label>
+                <Badge
+                  className={`py-1 px-3 rounded-full ${
+                    orderDetails?.data?.orderStatus === "confirmed"
+                      ? "bg-green-500"
+                      : "bg-black"
+                  }`}
+                >
+                  {orderDetails?.data?.orderStatus}
+                </Badge>
+              </Label>
             </div>
           </div>
           <Separator />
@@ -31,10 +48,15 @@ const ShoppingOrderDetailsView = () => {
             <div className="grid gap-2">
               <div className="font-medium">Order Details</div>
               <ul className="grid gap-3">
-                <li className="flex items-center justify-between">
-                  <span>Product One</span>
-                  <span>$100</span>
-                </li>
+                {orderDetails?.data?.cartItems 
+                  ? orderDetails?.data?.cartItems.map((item) => 
+                      <li className="flex items-center justify-between">
+                        <span>Title: {item.title}</span>
+                        <span>Quantity: {item.quantity}</span>
+                        <span>Price: ${item.price}</span>
+                      </li>
+                    )
+                  : null}
               </ul>
             </div>
           </div>
@@ -42,8 +64,8 @@ const ShoppingOrderDetailsView = () => {
             <div className="grid gap-2">
               <div className="font-medium">Shiping Info</div>
               <div className="grid gap-0.5 text-muted-foreground">
-                <span>Jhon Doe</span>
-                <span>Address</span>
+                <span>{user.userName}</span>
+                <span>{}</span>
                 <span>City</span>
                 <span>Pincode</span>
                 <span>Phone</span>
@@ -52,7 +74,6 @@ const ShoppingOrderDetailsView = () => {
               </div>
             </div>
           </div>
-          
         </div>
       </DialogContent>
     </div>
