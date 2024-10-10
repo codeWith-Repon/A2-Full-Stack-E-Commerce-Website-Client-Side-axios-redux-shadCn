@@ -5,19 +5,31 @@ import { Button } from "../ui/button";
 import { Dialog } from "../ui/dialog";
 import AdminOrderDetailsView from "./AdminOrderDetailsView";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllOrdersForAdmin } from "@/store/admin/order-slice/OrderSlice";
+import {
+  getAllOrdersForAdmin,
+  getOrderDetailsForAdmin,
+  resetOrderDetails,
+} from "@/store/admin/order-slice/OrderSlice";
 import { Badge } from "../ui/badge";
 
-const AdminOrdersView = () => {
+const AdminOrdersView = ({orderDetails}) => {
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
   const { orderList, orderDetails } = useSelector((state) => state.adminOrder);
   const dispatch = useDispatch();
+
+  function handleFetchOrderDetails(getId) {
+    dispatch(getOrderDetailsForAdmin(getId));
+  }
 
   useEffect(() => {
     dispatch(getAllOrdersForAdmin());
   }, [dispatch]);
 
-  console.log("orderList", orderList);
+  console.log("orderdetails", orderDetails);
+
+  useEffect(() => {
+    if (orderDetails !== null) setOpenDetailsDialog(true);
+  }, [orderDetails]);
 
   return (
     <Card>
@@ -56,15 +68,15 @@ const AdminOrdersView = () => {
                     <TableCell>
                       <Dialog
                         open={openDetailsDialog}
-                        // onOpenChange={() => {
-                        //   setOpendetailsDialog(false);
-                        //   dispatch(resetOrderDetails());
-                        // }}
+                        onOpenChange={() => {
+                          setOpenDetailsDialog(false);
+                          dispatch(resetOrderDetails());
+                        }}
                       >
                         <Button
-                          // onClick={() =>
-                          //   handleFetchOrderDetails(orderItem?._id)
-                          // }
+                          onClick={() =>
+                            handleFetchOrderDetails(orderItem?._id)
+                          }
                         >
                           View Details
                         </Button>
