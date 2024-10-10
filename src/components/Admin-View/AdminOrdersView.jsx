@@ -12,7 +12,7 @@ import {
 } from "@/store/admin/order-slice/OrderSlice";
 import { Badge } from "../ui/badge";
 
-const AdminOrdersView = ({orderDetails}) => {
+const AdminOrdersView = () => {
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
   const { orderList, orderDetails } = useSelector((state) => state.adminOrder);
   const dispatch = useDispatch();

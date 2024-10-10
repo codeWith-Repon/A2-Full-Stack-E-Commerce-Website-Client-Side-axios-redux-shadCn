@@ -3,13 +3,16 @@ import { DialogContent } from "../ui/dialog";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
 import CommonForm from "../common/CommonForm";
+import { Badge } from "../ui/badge";
+import { useSelector } from "react-redux";
 
 const initialFormData = {
   status: "",
 };
 
-const AdminOrderDetailsView = () => {
+const AdminOrderDetailsView = ({orderDetails}) => {
   const [formData, setFormData] = useState(initialFormData);
+  const {user} = useSelector((state)=> state.auth)
 
   function handleUpdateStatus(event) {
     event.preventDefault();
@@ -22,19 +25,37 @@ const AdminOrderDetailsView = () => {
           <div className="grid gap-2">
             <div className="flex mt-6 items-center justify-between">
               <p className="font-medium">Order ID</p>
-              <Label>14321</Label>
+              <Label>{orderDetails?.data?._id}</Label>
             </div>
             <div className="flex mt-2 items-center justify-between">
               <p className="font-medium">Order Date</p>
-              <Label>10-10-2024</Label>
+              <Label>{orderDetails?.data?.orderDate?.split("T")[0]}</Label>
             </div>
             <div className="flex mt-2 items-center justify-between">
               <p className="font-medium">Order Price</p>
-              <Label>$500</Label>
+              <Label>${orderDetails?.data?.totalAmount}</Label>
+            </div>
+            <div className="flex mt-2 items-center justify-between">
+              <p className="font-medium">Payment method</p>
+              <Label>{orderDetails?.data?.paymentMethod}</Label>
+            </div>
+            <div className="flex mt-2 items-center justify-between">
+              <p className="font-medium">Payment Status</p>
+              <Label>{orderDetails?.data?.paymentStatus}</Label>
             </div>
             <div className="flex mt-2 items-center justify-between">
               <p className="font-medium">Order Status</p>
-              <Label>In Process</Label>
+              <Label>
+                <Badge
+                  className={`py-1 px-3 rounded-full ${
+                    orderDetails?.data?.orderStatus === "confirmed"
+                      ? "bg-green-500"
+                      : "bg-black"
+                  }`}
+                >
+                  {orderDetails?.data?.orderStatus}
+                </Badge>
+              </Label>
             </div>
           </div>
           <Separator />
@@ -42,10 +63,15 @@ const AdminOrderDetailsView = () => {
             <div className="grid gap-2">
               <div className="font-medium">Order Details</div>
               <ul className="grid gap-3">
-                <li className="flex items-center justify-between">
-                  <span>Product One</span>
-                  <span>$100</span>
-                </li>
+                {orderDetails?.data?.cartItems 
+                  ? orderDetails?.data?.cartItems.map((item) => 
+                      <li className="flex items-center justify-between">
+                        <span>Title: {item.title}</span>
+                        <span>Quantity: {item.quantity}</span>
+                        <span>Price: ${item.price}</span>
+                      </li>
+                    )
+                  : null}
               </ul>
             </div>
           </div>
@@ -53,13 +79,12 @@ const AdminOrderDetailsView = () => {
             <div className="grid gap-2">
               <div className="font-medium">Shiping Info</div>
               <div className="grid gap-0.5 text-muted-foreground">
-                <span>Jhon Doe</span>
-                <span>Address</span>
-                <span>City</span>
-                <span>Pincode</span>
-                <span>Phone</span>
-                <span>Phone</span>
-                <span>Notes</span>
+                <span>Name: {user.userName}</span>
+                <span>Address: {orderDetails?.data?.addressInfo?.address}</span>
+                <span>City: {orderDetails?.data?.addressInfo?.city}</span>
+                <span>Pincode: {orderDetails?.data?.addressInfo?.pincode}</span>
+                <span>Phone: {orderDetails?.data?.addressInfo?.phone}</span>
+                <span>Notes: {orderDetails?.data?.addressInfo?.notes}</span>
               </div>
             </div>
           </div>
