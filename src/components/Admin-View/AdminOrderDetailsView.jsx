@@ -18,6 +18,8 @@ const AdminOrderDetailsView = ({ orderDetails }) => {
   const dispatch = useDispatch();
   const {toast} = useToast()
 
+  console.log(orderDetails,"orderdetails 123")
+  
   function handleUpdateStatus(event) {
     event.preventDefault();
     console.log("formData", formData);
