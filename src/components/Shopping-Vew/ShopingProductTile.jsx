@@ -4,17 +4,29 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { brandOptionsMap, categoryOptionsMap } from "@/config";
 import React from "react";
 
-const ShopingProductTile = ({ product, handleGetProductDetails,handleAddToCart }) => {
+const ShopingProductTile = ({
+  product,
+  handleGetProductDetails,
+  handleAddToCart,
+}) => {
   return (
     <Card className="w-full max-w-sm mx-auto">
-      <div onClick={()=>handleGetProductDetails(product?._id)}>
+      <div onClick={() => handleGetProductDetails(product?._id)}>
         <div className="relative">
           <img
             src={product?.image}
             alt={product?.title}
             className="w-full object-cover rounded-t-lg"
           />
-          {product?.salePrice > 0 ? (
+          {product?.totalStock === 0 ? (
+            <Badge className="absolute top-2 left-2 bg-red-500 hover:bg-red-600">
+              Out Of Stock
+            </Badge>
+          ) : product?.totalStock < 10 ? (
+            <Badge className="absolute top-2 left-2 bg-red-500 hover:bg-red-600">
+              {`Ony ${product?.totalStock} items left`}
+            </Badge>
+          ) : product?.salePrice > 0 ? (
             <Badge className="absolute top-2 left-2 bg-red-500 hover:bg-red-600">
               Sale
             </Badge>
@@ -46,9 +58,21 @@ const ShopingProductTile = ({ product, handleGetProductDetails,handleAddToCart }
           </div>
         </CardContent>
       </div>
-        <CardFooter>
-          <Button onClick={()=>handleAddToCart(product?._id)} className="w-full">Add to cart</Button>
-        </CardFooter>
+      <CardFooter>
+        {
+          product?.totalStock === 0 ?  <Button
+          className="w-full opacity-60 cursor-not-allowed"
+        >
+          Out Of Stock
+        </Button> :  <Button
+          onClick={() => handleAddToCart(product?._id)}
+          className="w-full"
+        >
+          Add to cart
+        </Button>
+        }
+       
+      </CardFooter>
     </Card>
   );
 };
