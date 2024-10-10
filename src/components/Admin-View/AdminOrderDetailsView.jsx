@@ -4,18 +4,33 @@ import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
 import CommonForm from "../common/CommonForm";
 import { Badge } from "../ui/badge";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllOrdersForAdmin, getOrderDetailsForAdmin, updateOrderStatus } from "@/store/admin/order-slice/OrderSlice";
 
 const initialFormData = {
   status: "",
 };
 
-const AdminOrderDetailsView = ({orderDetails}) => {
+const AdminOrderDetailsView = ({ orderDetails }) => {
   const [formData, setFormData] = useState(initialFormData);
-  const {user} = useSelector((state)=> state.auth)
+  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
   function handleUpdateStatus(event) {
     event.preventDefault();
+    console.log("formData", formData);
+    const { status } = formData;
+
+    dispatch(
+      updateOrderStatus({ id: orderDetails?.data?._id, orderStatus: status })
+    ).then((data) => {
+      console.log(data, "123")
+      if(data?.payload?.data?.success){
+        dispatch(getOrderDetailsForAdmin(orderDetails?.data?._id))
+        dispatch(getAllOrdersForAdmin())
+        setFormData(initialFormData)
+      }
+    });
   }
 
   return (
@@ -50,6 +65,8 @@ const AdminOrderDetailsView = ({orderDetails}) => {
                   className={`py-1 px-3 rounded-full ${
                     orderDetails?.data?.orderStatus === "confirmed"
                       ? "bg-green-500"
+                      :orderDetails?.data?.orderStatus === "rejected"
+                      ?"bg-red-600"
                       : "bg-black"
                   }`}
                 >
@@ -63,14 +80,14 @@ const AdminOrderDetailsView = ({orderDetails}) => {
             <div className="grid gap-2">
               <div className="font-medium">Order Details</div>
               <ul className="grid gap-3">
-                {orderDetails?.data?.cartItems 
-                  ? orderDetails?.data?.cartItems.map((item) => 
+                {orderDetails?.data?.cartItems
+                  ? orderDetails?.data?.cartItems.map((item) => (
                       <li className="flex items-center justify-between">
                         <span>Title: {item.title}</span>
                         <span>Quantity: {item.quantity}</span>
                         <span>Price: ${item.price}</span>
                       </li>
-                    )
+                    ))
                   : null}
               </ul>
             </div>
