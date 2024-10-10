@@ -6,6 +6,7 @@ import CommonForm from "../common/CommonForm";
 import { Badge } from "../ui/badge";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllOrdersForAdmin, getOrderDetailsForAdmin, updateOrderStatus } from "@/store/admin/order-slice/OrderSlice";
+import { useToast } from "@/hooks/use-toast";
 
 const initialFormData = {
   status: "",
@@ -15,6 +16,7 @@ const AdminOrderDetailsView = ({ orderDetails }) => {
   const [formData, setFormData] = useState(initialFormData);
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+  const {toast} = useToast()
 
   function handleUpdateStatus(event) {
     event.preventDefault();
@@ -29,6 +31,9 @@ const AdminOrderDetailsView = ({ orderDetails }) => {
         dispatch(getOrderDetailsForAdmin(orderDetails?.data?._id))
         dispatch(getAllOrdersForAdmin())
         setFormData(initialFormData)
+        toast({
+          title: data?.payload?.data?.message
+        })
       }
     });
   }

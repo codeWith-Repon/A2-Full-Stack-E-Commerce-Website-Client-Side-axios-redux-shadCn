@@ -16,6 +16,7 @@ const AdminOrdersView = () => {
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
   const { orderList, orderDetails } = useSelector((state) => state.adminOrder);
   const dispatch = useDispatch();
+  console.log(orderList,"orderList")
 
   function handleFetchOrderDetails(getId) {
     dispatch(getOrderDetailsForAdmin(getId));
@@ -58,6 +59,8 @@ const AdminOrdersView = () => {
                         className={`py-1 px-3 rounded-full ${
                           orderItem?.orderStatus === "confirmed"
                             ? "bg-green-500"
+                            : orderItem?.orderStatus === "rejected"
+                            ? "bg-red-600"
                             : "bg-black"
                         }`}
                       >

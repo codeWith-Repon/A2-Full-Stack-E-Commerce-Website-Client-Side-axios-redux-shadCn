@@ -43,6 +43,8 @@ const ShoppingOrderDetailsView = ({ orderDetails }) => {
                   className={`py-1 px-3 rounded-full ${
                     orderDetails?.data?.orderStatus === "confirmed"
                       ? "bg-green-500"
+                      :  orderDetails?.data?.orderStatus === "rejected"
+                      ? "bg-red-600"
                       : "bg-black"
                   }`}
                 >

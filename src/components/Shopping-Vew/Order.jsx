@@ -67,7 +67,9 @@ const ShopingOrders = () => {
                       <Badge
                         className={`py-1 px-3 rounded-full ${
                           orderItem?.orderStatus === "confirmed"
-                            ? "bg-green-500"
+                            ? "bg-green-500" 
+                            : orderItem?.orderStatus === "rejected" 
+                            ? "bg-red-600" 
                             : "bg-black"
                         }`}
                       >
