@@ -83,9 +83,18 @@ const ProductDetailsDialog = ({
             </div>
             <span className="text-muted-foreground">(4.5)</span>
           </div>
-          <div className="mt-5 mb-5">
-            <Button className="w-full" onClick={()=>handleAddToCart(productDetails?._id)}>Add to Cart</Button>
+          {
+            productDetails?.totalStock === 0 ?  <div className="mt-5 mb-5">
+            <Button className="w-full opacity-60 cursor-not-allowed">
+              Out of Stock
+            </Button>
           </div>
+          : 
+          <div className="mt-5 mb-5">
+          <Button className="w-full" onClick={()=>handleAddToCart(productDetails?._id)}>Add to Cart</Button>
+        </div>
+          }
+         
           <Separator />
           <div className="max-h-[300px] overflow-auto">
             <h2 className="text-xl font-bold mb-4">Reviews</h2>
