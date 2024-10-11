@@ -65,7 +65,7 @@ const ShopingProductTile = ({
         >
           Out Of Stock
         </Button> :  <Button
-          onClick={() => handleAddToCart(product?._id)}
+          onClick={() => handleAddToCart(product?._id, product?.totalStock)}
           className="w-full"
         >
           Add to cart
