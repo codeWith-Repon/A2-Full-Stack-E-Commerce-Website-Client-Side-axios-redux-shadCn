@@ -13,11 +13,15 @@ const SearchProducts = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useDispatch();
   const { searchResults } = useSelector((state) => state.shopSearch);
+  let timeoutId = null;
   console.log(keyword);
 
   useEffect(() => {
+
+    if (timeoutId) clearTimeout(timeoutId); // clear any previously set timeout
+
     if (keyword && keyword.trim() !== "" && keyword.trim().length > 3) {
-      setTimeout(() => {
+      timeoutId = setTimeout(() => {
         setSearchParams(new URLSearchParams(`?keyword=${keyword}`));
         dispatch(getSearchResults(keyword));
       }, 1000);
@@ -25,6 +29,11 @@ const SearchProducts = () => {
       dispatch(resetSearchResults());
       setSearchParams(new URLSearchParams(`?keyword=${keyword}`));
     }
+
+    return () => {
+      if(timeoutId) clearTimeout(timeoutId)
+    }
+  
   }, [keyword]);
 
   console.log("search reasult", searchResults);
