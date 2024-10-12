@@ -7,17 +7,28 @@ import {
   resetSearchResults,
 } from "@/store/shop/Search-slice/searchSlice";
 import ShopingProductTile from "./ShopingProductTile";
+import { useToast } from "@/hooks/use-toast";
+import {
+  addToCart,
+  fetchCartItems,
+} from "@/store/shop/Cart-Slice/ShopCartSlice";
+import ProductDetailsDialog from "./ProductDetailsDialog";
+import { fetchProdcutDetails } from "@/store/shop/products-slice/ShoppingProductSlice";
 
 const SearchProducts = () => {
   const [keyword, setKeyword] = useState("");
+  const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useDispatch();
   const { searchResults } = useSelector((state) => state.shopSearch);
+  const { cartItems } = useSelector((state) => state.shopCart);
+  const { productDetails } = useSelector((state) => state.shopProducts);
+  const { user } = useSelector((state) => state.auth);
+  const { toast } = useToast();
   let timeoutId = null;
   console.log(keyword);
 
   useEffect(() => {
-
     if (timeoutId) clearTimeout(timeoutId); // clear any previously set timeout
 
     if (keyword && keyword.trim() !== "" && keyword.trim().length > 3) {
@@ -31,12 +42,50 @@ const SearchProducts = () => {
     }
 
     return () => {
-      if(timeoutId) clearTimeout(timeoutId)
-    }
-  
+      if (timeoutId) clearTimeout(timeoutId);
+    };
   }, [keyword]);
 
-  console.log("search reasult", searchResults);
+  function handleAddToCart(getCurrentId, getTotalStock) {
+    let getCartItems = cartItems.items || [];
+
+    if (getCartItems.length) {
+      const indexOfCurrentitem = getCartItems.findIndex(
+        (item) => item.productId === getCurrentId
+      );
+      if (indexOfCurrentitem > -1) {
+        const getQuantity = getCartItems[indexOfCurrentitem].quantity;
+        if (getQuantity + 1 > getTotalStock) {
+          toast({
+            title: `Only ${getQuantity} quantity can be added for this item`,
+            variant: "destructive",
+          });
+          return;
+        }
+      }
+    }
+
+    dispatch(
+      addToCart({ userId: user?.id, productId: getCurrentId, quantity: 1 })
+    ).then((data) => {
+      console.log("data is: ", data);
+      if (data?.payload?.success) {
+        dispatch(fetchCartItems(user?.id));
+        toast({
+          title: "Product is added to cart",
+        });
+      }
+    });
+  }
+
+  function handleGetProductDetails(getCurrentProductId) {
+    console.log("current product id is : ", getCurrentProductId);
+    dispatch(fetchProdcutDetails(getCurrentProductId));
+  }
+
+  useEffect(() => {
+    if (productDetails !== null) setOpenDetailsDialog(true);
+  }, [productDetails]);
 
   return (
     <div className="container mx-auto md:px-6 px-4 py-8">
@@ -56,9 +105,18 @@ const SearchProducts = () => {
       ) : null}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
         {searchResults.map((item) => (
-          <ShopingProductTile product={item} />
+          <ShopingProductTile
+            handleAddToCart={handleAddToCart}
+            product={item}
+            handleGetProductDetails={handleGetProductDetails}
+          />
         ))}
       </div>
+      <ProductDetailsDialog
+        openDetailsDialog={openDetailsDialog}
+        setOpenDetailsDialog={setOpenDetailsDialog}
+        productDetails={productDetails}
+      />
     </div>
   );
 };
