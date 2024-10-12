@@ -3,6 +3,7 @@ import { Input } from "../ui/input";
 import { useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getSearchResults } from "@/store/shop/Search-slice/searchSlice";
+import ShopingProductTile from "./ShopingProductTile";
 
 const SearchProducts = () => {
   const [keyword, setKeyword] = useState("");
@@ -35,7 +36,12 @@ const SearchProducts = () => {
           />
         </div>
       </div>
-      <div>Search Results</div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+        {
+          searchResults && searchResults.length ?
+          searchResults.map(item => <ShopingProductTile product={item}/>) : <h1 className="text-5xl font-extrabold">No Result Found!!!</h1>
+        }
+      </div>
     </div>
   );
 };
