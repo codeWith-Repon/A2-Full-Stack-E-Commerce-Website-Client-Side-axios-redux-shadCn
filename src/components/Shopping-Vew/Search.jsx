@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import { useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getSearchResults } from "@/store/shop/Search-slice/searchSlice";
+import {
+  getSearchResults,
+  resetSearchResults,
+} from "@/store/shop/Search-slice/searchSlice";
 import ShopingProductTile from "./ShopingProductTile";
 
 const SearchProducts = () => {
@@ -16,12 +19,15 @@ const SearchProducts = () => {
     if (keyword && keyword.trim() !== "" && keyword.trim().length > 3) {
       setTimeout(() => {
         setSearchParams(new URLSearchParams(`?keyword=${keyword}`));
-        dispatch(getSearchResults(keyword))
+        dispatch(getSearchResults(keyword));
       }, 1000);
+    } else {
+      dispatch(resetSearchResults());
+      setSearchParams(new URLSearchParams(`?keyword=${keyword}`));
     }
   }, [keyword]);
 
-  console.log("search reasult", searchResults)
+  console.log("search reasult", searchResults);
 
   return (
     <div className="container mx-auto md:px-6 px-4 py-8">
@@ -36,11 +42,13 @@ const SearchProducts = () => {
           />
         </div>
       </div>
+      {!searchResults.length ? (
+        <h1 className="text-5xl font-extrabold">No Result Found!!!</h1>
+      ) : null}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-        {
-          searchResults && searchResults.length ?
-          searchResults.map(item => <ShopingProductTile product={item}/>) : <h1 className="text-5xl font-extrabold">No Result Found!!!</h1>
-        }
+        {searchResults.map((item) => (
+          <ShopingProductTile product={item} />
+        ))}
       </div>
     </div>
   );
