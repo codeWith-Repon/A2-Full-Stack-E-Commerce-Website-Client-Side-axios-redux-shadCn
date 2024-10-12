@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 
 const initialState = {
   isLoading: false,
@@ -9,7 +10,7 @@ export const getSearchResults = createAsyncThunk(
   "order/getSearchResults",
   async (keyword) => {
     const response = await axios.get(
-      `http://localhost:5000/api/shop/order/search/${keyword}`
+      `http://localhost:5000/api/shop/search/${keyword}`
     );
     return response.data;
   }
@@ -25,7 +26,7 @@ const searchSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getSearchResults.fulfilled, (state, action) => {
-        state.isLoading = true;
+        state.isLoading = false;
         state.searchResults = action.payload.data;
       })
       .addCase(getSearchResults.rejected, (state) => {
