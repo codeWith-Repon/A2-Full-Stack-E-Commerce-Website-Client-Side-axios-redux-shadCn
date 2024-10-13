@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Dialog, DialogContent } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
@@ -6,7 +6,10 @@ import { Avatar, AvatarFallback } from "../ui/avatar";
 import { StarIcon } from "lucide-react";
 import { Input } from "../ui/input";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart, fetchCartItems } from "@/store/shop/Cart-Slice/ShopCartSlice";
+import {
+  addToCart,
+  fetchCartItems,
+} from "@/store/shop/Cart-Slice/ShopCartSlice";
 import { useToast } from "@/hooks/use-toast";
 import { setProductDetails } from "@/store/shop/products-slice/ShoppingProductSlice";
 import { Label } from "../ui/label";
@@ -17,47 +20,53 @@ const ProductDetailsDialog = ({
   setOpenDetailsDialog,
   productDetails,
 }) => {
+  const [reviewMsg, setReviewMsg] = useState("");
+  const [rating, setRating] = useState(0);
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+  const { cartItems } = useSelector((state) => state.shopCart);
+  const { toast } = useToast();
 
-  const dispatch = useDispatch()
-  const {user} = useSelector(state => state.auth)
-  const {cartItems} = useSelector((state)=> state.shopCart)
-  const {toast} = useToast()
-   
+  function handleRatingChange(getRating) {
+    setRating(getRating);
+  }
+
   function handleAddToCart(getCurrentId, totalStock) {
-    const getCartItems = cartItems.items || []
+    const getCartItems = cartItems.items || [];
 
-    if(getCartItems.length){
-      const indexOfCurrentItem = getCartItems.findIndex(item => item.productId === getCurrentId)
-      if(indexOfCurrentItem > -1){
-        const getQuantity = getCartItems[indexOfCurrentItem].quantity
-        if(getQuantity + 1 > totalStock){
+    if (getCartItems.length) {
+      const indexOfCurrentItem = getCartItems.findIndex(
+        (item) => item.productId === getCurrentId
+      );
+      if (indexOfCurrentItem > -1) {
+        const getQuantity = getCartItems[indexOfCurrentItem].quantity;
+        if (getQuantity + 1 > totalStock) {
           toast({
             title: `Only ${getQuantity} quantity can be added for this item`,
-            variant: "destructive"
-          })
-          return
+            variant: "destructive",
+          });
+          return;
         }
       }
     }
 
-
-    dispatch(addToCart({userId: user?.id, productId: getCurrentId, quantity: 1}))
-    .then(data=> {
-      console.log('data is: ', data)
-      if(data?.payload?.success){
-        dispatch(fetchCartItems(user?.id))
+    dispatch(
+      addToCart({ userId: user?.id, productId: getCurrentId, quantity: 1 })
+    ).then((data) => {
+      console.log("data is: ", data);
+      if (data?.payload?.success) {
+        dispatch(fetchCartItems(user?.id));
         toast({
-          title: "Product is added to cart"
-        })
+          title: "Product is added to cart",
+        });
       }
-    })
+    });
   }
 
-  function handleDialogClose(){
-    setOpenDetailsDialog(false)
-    dispatch(setProductDetails())
+  function handleDialogClose() {
+    setOpenDetailsDialog(false);
+    dispatch(setProductDetails());
   }
-
 
   return (
     <Dialog open={openDetailsDialog} onOpenChange={handleDialogClose}>
@@ -102,18 +111,28 @@ const ProductDetailsDialog = ({
             </div>
             <span className="text-muted-foreground">(4.5)</span>
           </div>
-          {
-            productDetails?.totalStock === 0 ?  <div className="mt-5 mb-5">
-            <Button className="w-full opacity-60 cursor-not-allowed">
-              Out of Stock
-            </Button>
-          </div>
-          : 
-          <div className="mt-5 mb-5">
-          <Button className="w-full" onClick={()=>handleAddToCart(productDetails?._id, productDetails?.totalStock)}>Add to Cart</Button>
-        </div>
-          }
-         
+          {productDetails?.totalStock === 0 ? (
+            <div className="mt-5 mb-5">
+              <Button className="w-full opacity-60 cursor-not-allowed">
+                Out of Stock
+              </Button>
+            </div>
+          ) : (
+            <div className="mt-5 mb-5">
+              <Button
+                className="w-full"
+                onClick={() =>
+                  handleAddToCart(
+                    productDetails?._id,
+                    productDetails?.totalStock
+                  )
+                }
+              >
+                Add to Cart
+              </Button>
+            </div>
+          )}
+
           <Separator />
           <div className="max-h-[300px] overflow-auto">
             <h2 className="text-xl font-bold mb-4">Reviews</h2>
@@ -181,11 +200,19 @@ const ProductDetailsDialog = ({
             </div>
             <div className="mt-10 flex flex-col gap-2">
               <Label>Write a review</Label>
-              <div className="flex">
-                <StarRating rating={3} />
+              <div className="flex gap-1">
+                <StarRating
+                  rating={rating}
+                  handleRatingChange={handleRatingChange}
+                />
               </div>
-              <Input placeholder="Write a review..." />
-              <Button>Submit</Button>
+              <Input
+                name="reviewMsg"
+                value={reviewMsg}
+                onChange={(event) => setReviewMsg(event.target.value)}
+                placeholder="Write a review..."
+              />
+              <Button disabled={reviewMsg.trim() === ""}>Submit</Button>
             </div>
           </div>
         </div>
