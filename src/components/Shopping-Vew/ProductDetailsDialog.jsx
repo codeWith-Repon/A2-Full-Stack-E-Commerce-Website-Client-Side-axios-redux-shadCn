@@ -14,6 +14,7 @@ import { useToast } from "@/hooks/use-toast";
 import { setProductDetails } from "@/store/shop/products-slice/ShoppingProductSlice";
 import { Label } from "../ui/label";
 import StarRating from "../common/StarRating";
+import { addReview } from "@/store/shop/reviewSlice/ReviewSlice";
 
 const ProductDetailsDialog = ({
   openDetailsDialog,
@@ -66,6 +67,20 @@ const ProductDetailsDialog = ({
   function handleDialogClose() {
     setOpenDetailsDialog(false);
     dispatch(setProductDetails());
+    setRating(0);
+    setReviewMsg("");
+  }
+
+  function handleAddReview(){
+    dispatch(addReview({
+      productId: productDetails?._id,
+      userId: user?.id,
+      userName: user?.userName,
+      reviewMessage: reviewMsg,
+      reviewValue: rating,
+    })).then((data)=> {
+      console.log("rating data",data)
+    })
   }
 
   return (
@@ -212,7 +227,7 @@ const ProductDetailsDialog = ({
                 onChange={(event) => setReviewMsg(event.target.value)}
                 placeholder="Write a review..."
               />
-              <Button disabled={reviewMsg.trim() === ""}>Submit</Button>
+              <Button onClick={handleAddReview} disabled={reviewMsg.trim() === ""}>Submit</Button>
             </div>
           </div>
         </div>
