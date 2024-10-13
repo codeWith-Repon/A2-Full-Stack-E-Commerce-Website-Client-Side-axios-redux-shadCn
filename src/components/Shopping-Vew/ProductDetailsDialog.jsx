@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart, fetchCartItems } from "@/store/shop/Cart-Slice/ShopCartSlice";
 import { useToast } from "@/hooks/use-toast";
 import { setProductDetails } from "@/store/shop/products-slice/ShoppingProductSlice";
+import { Label } from "../ui/label";
+import StarRating from "../common/StarRating";
 
 const ProductDetailsDialog = ({
   openDetailsDialog,
@@ -177,7 +179,11 @@ const ProductDetailsDialog = ({
                 </div>
               </div>
             </div>
-            <div className="mt-6 flex gap-2">
+            <div className="mt-10 flex flex-col gap-2">
+              <Label>Write a review</Label>
+              <div className="flex">
+                <StarRating rating={3} />
+              </div>
               <Input placeholder="Write a review..." />
               <Button>Submit</Button>
             </div>
