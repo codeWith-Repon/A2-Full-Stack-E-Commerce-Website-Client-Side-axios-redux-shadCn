@@ -13,7 +13,8 @@ const ProductImageUpload = ({
   setUploadedImageUrl,
   setImageLoadingState,
   imageLoadingState,
-  currentEditedId
+  currentEditedId,
+  isCustomStyle = false
 }) => {
   const inputRef = useRef(null);
   // console.log(inputRef.current.value)
@@ -60,7 +61,7 @@ const ProductImageUpload = ({
   }, [imageFile]);
 
   return (
-    <div className="w-full max-w-md mx-auto mt-4">
+    <div className={`w-full mt-4 ${isCustomStyle ? "" : "max-w-md mx-auto "}`}>
       <Label className="text-lg font-semibold mb-2 block">Upload Image</Label>
       <div
         onDragOver={handleDragOver}
