@@ -10,11 +10,11 @@ import { useToast } from "@/hooks/use-toast";
 const ShopingCheckOut = () => {
   const { cartItems } = useSelector((state) => state.shopCart);
   const { user } = useSelector((state) => state.auth);
-  const {approvalURL} = useSelector((state)=> state.shopOrder)
+  const { approvalURL } = useSelector((state) => state.shopOrder);
   const [currentSelectedAddress, setCurrentSelctedAddress] = useState(null);
-  const [isPaymentStart, setIsPaymentStart]= useState(false)
-  const dispatch = useDispatch()
-  const {toast} = useToast()
+  const [isPaymentStart, setIsPaymentStart] = useState(false);
+  const dispatch = useDispatch();
+  const { toast } = useToast();
   console.log("approvalURL", approvalURL);
 
   const totalCartAmount =
@@ -31,20 +31,19 @@ const ShopingCheckOut = () => {
       : 0;
 
   function handleInitiatePaypalPayment() {
-
-    if(cartItems.length === 0){
+    if (cartItems.length === 0) {
       toast({
-        title: 'Your cart is empty. Please add items to proceed', 
-        variant: 'destructive'
-      })
+        title: "Your cart is empty. Please add items to proceed",
+        variant: "destructive",
+      });
       return;
     }
 
-    if(currentSelectedAddress === null){
+    if (currentSelectedAddress === null) {
       toast({
-        title: 'Please select one address to proced.', 
-        variant: 'destructive'
-      })
+        title: "Please select one address to proced.",
+        variant: "destructive",
+      });
       return;
     }
 
@@ -79,18 +78,18 @@ const ShopingCheckOut = () => {
       payerId: "",
     };
 
-    dispatch(createNewOrder(orderData)).then((data)=>{
-      console.log("page checkout data is ", data)
-      if(data?.payload?.data?.success){
-        setIsPaymentStart(true)
-      }else{
-        setIsPaymentStart(false)
+    dispatch(createNewOrder(orderData)).then((data) => {
+      console.log("page checkout data is ", data);
+      if (data?.payload?.data?.success) {
+        setIsPaymentStart(true);
+      } else {
+        setIsPaymentStart(false);
       }
-    })
+    });
   }
 
-  if(approvalURL){
-    window.location.href = approvalURL
+  if (approvalURL) {
+    window.location.href = approvalURL;
   }
 
   return (
@@ -103,7 +102,10 @@ const ShopingCheckOut = () => {
         />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-5 p-5">
-        <Address setCurrentSelctedAddress={setCurrentSelctedAddress} />
+        <Address
+          selectedId={currentSelectedAddress}
+          setCurrentSelctedAddress={setCurrentSelctedAddress}
+        />
         <div className="flex flex-col gap-4">
           {cartItems && cartItems.items && cartItems.items.length > 0
             ? cartItems.items.map((item) => (
