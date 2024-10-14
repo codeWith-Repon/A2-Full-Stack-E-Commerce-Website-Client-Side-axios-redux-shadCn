@@ -119,8 +119,13 @@ const ShopingCheckOut = () => {
             </div>
           </div>
           <div className="mt-4 w-full">
-            <Button onClick={handleInitiatePaypalPayment} className="w-full">
-              Checkout with Paypal
+            <Button
+              onClick={handleInitiatePaypalPayment}
+              className={`w-full ${isPaymentStart ? "opacity-70" : null}`}
+            >
+              {isPaymentStart
+                ? "Processing Paypal Payment..."
+                : "Checkout with Paypal"}
             </Button>
           </div>
         </div>
