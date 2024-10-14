@@ -20,6 +20,8 @@ const AdminDashboard = () => {
     dispatch(addFeatureImages(uploadedImageUrl)).then((data) => {
       if (data?.payload?.success) {
         dispatch(getFeatureImages());
+        setImageFile(null);
+        setUploadedImageUrl("")
       }
     });
   }

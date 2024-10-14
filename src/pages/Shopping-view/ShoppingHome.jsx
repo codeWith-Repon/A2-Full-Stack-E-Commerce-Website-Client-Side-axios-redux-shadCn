@@ -61,7 +61,6 @@ const ShoppingHome = () => {
   const navigate = useNavigate();
   const {toast} = useToast()
 
-  const slides = [bannerOne, bannerTwo, bannerThree];
 
   function handleNavigateToListingPage(getCurrentItem, section) {
     sessionStorage.removeItem("filters");
@@ -95,10 +94,10 @@ const ShoppingHome = () => {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
+      setCurrentSlide((prevSlide) => (prevSlide + 1) % featureImageList.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [featureImageList]);
 
   useEffect(() => {
     dispatch(
@@ -136,7 +135,7 @@ const ShoppingHome = () => {
           size="icon"
           onClick={() =>
             setCurrentSlide(
-              (prevSlide) => (prevSlide - 1 + slides.length) % slides.length
+              (prevSlide) => (prevSlide - 1 + featureImageList.length) % featureImageList.length
             )
           }
           className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white/80"
@@ -147,7 +146,7 @@ const ShoppingHome = () => {
           variant="outline"
           size="icon"
           onClick={() =>
-            setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length)
+            setCurrentSlide((prevSlide) => (prevSlide + 1) % featureImageList.length)
           }
           className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white/80"
         >
