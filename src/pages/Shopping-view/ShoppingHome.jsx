@@ -29,6 +29,7 @@ import { useNavigate } from "react-router-dom";
 import { addToCart, fetchCartItems } from "@/store/shop/Cart-Slice/ShopCartSlice";
 import { useToast } from "@/hooks/use-toast";
 import ProductDetailsDialog from "@/components/Shopping-Vew/ProductDetailsDialog";
+import { getFeatureImages } from "@/store/CommonSlice/commonSlice";
 
 
 const categoriesWithIcon = [
@@ -52,6 +53,7 @@ const ShoppingHome = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const { productList, productDetails } = useSelector((state) => state.shopProducts);
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false)
+  const {featureImageList} = useSelector((state)=> state.commonFeature)
 
   // console.log("home product", productList);
   const { user } = useSelector((state) => state.auth);
@@ -112,19 +114,23 @@ const ShoppingHome = () => {
     
   },[productDetails])
 
+  useEffect(() => {
+    dispatch(getFeatureImages());
+  }, [dispatch]);
+
 
   return (
     <div className="flex flex-col min-h-screen">
       <div className="relative w-full h-[600px] overflow-hidden">
-        {slides.map((slide, index) => (
+        {featureImageList && featureImageList.length > 0 ? featureImageList.map((slide, index) => (
           <img
-            src={slide}
+            src={slide?.image}
             key={index}
             className={`${
               index === currentSlide ? "opacity-100" : "opacity-0"
             } absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000`}
           />
-        ))}
+        )): null}
         <Button
           variant="outline"
           size="icon"
