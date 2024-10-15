@@ -2,6 +2,7 @@ import ProductImageUpload from "@/components/Admin-View/ProductImageUpload";
 import { Button } from "@/components/ui/button";
 import {
   addFeatureImages,
+  deleteFeatureImage,
   getFeatureImages,
 } from "@/store/CommonSlice/commonSlice";
 import React, { useEffect, useState } from "react";
@@ -24,6 +25,16 @@ const AdminDashboard = () => {
         setUploadedImageUrl("")
       }
     });
+  }
+
+  function handleDelete(imageId){
+    console.log("deleting image ", imageId)
+    dispatch(deleteFeatureImage(imageId)).then((data)=>{
+      console.log("delete", data)
+      if (data?.payload?.success) {
+        dispatch(getFeatureImages());
+      }
+    })
   }
 
   useEffect(() => {
@@ -50,11 +61,14 @@ const AdminDashboard = () => {
       <div className="flex flex-col gap-4 mt-5">
         {featureImageList && featureImageList.length > 0
           ? featureImageList.map((featureImageItem) => (
+            <div>
               <img
                 src={featureImageItem.image}
                 alt=""
                 className="w-full h-[300px] object-cover rounded-t-lg"
               />
+              <Button className="mt-5" onClick={()=> handleDelete(featureImageItem?._id)}>Delete</Button>
+              </div>
             ))
           : null}
       </div>
